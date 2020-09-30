@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar registro</title>
+</head>
+<body>
+
+<h1>Editar registro</h1>
+
+
+<h2>Registro actual</h2>
+<ul>
+    <li> Marca: {{ registro.marca }}  </li>
+    <li> Presentacion: {{ registro.presentacion }}  </li>
+</ul>
+
+<form method="POST">
+
+  <select name="marca" id="marca" >
+         {% for marca in marcas %}
+
+        <option value="{{ marca.id }}" >
+            {{ marca.name }}
+        </option>
+
+        {% endfor %}
+
+    </select>
+
+<br><br>
+
+   <select name="presentacion" id="presentacion" >
+         {% for presentacion in presentaciones %}
+
+        <option value="{{ presentacion.id }}" >
+            {{ presentacion.name }}
+        </option>
+
+        {% endfor %}
+
+    </select>
+<br><br>
+
+
+<button type="submit">Guardar</button>
+
+{% csrf_token %}
+
+</form>
+
+
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registros</title>
+</head>
+<body>
+
+<h1>Altas, bajas y cambios</h1>
+
+<h2> Num. Registros: {{ no_registros }} </h2>
+
+<button>
+    <a href="nuevo">Agregar nuevo registro</a>
+</button>
+
+
+<br><br>
+
+<style>
+    table, th, td {
+      border: 1px solid black;
+    }
+
+</style>
+
+<table style="width:100%">
+
+    <thead>
+
+      <tr>
+        <th>Marca</th>
+        <th>Presentacion</th>
+        <th>Editar</th>
+        <th>Eliminar</th>
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+    {% for registro in registros %}
+
+        <tr>
+            <th> {{ registro.get_marca }} </th>
+            <th>{{ registro.get_presentacion }}</th>
+            <th> <a href="editar_registro/{{ registro.id }}">Editar</a> </th>
+            <th> <a href="eliminar_registro/{{ registro.id }}">Eliminar</a> </th>
+
+        </tr>
+
+   {% endfor %}
+
+
+    </tbody>
+
+</table>
+
+</body>
+</html>
