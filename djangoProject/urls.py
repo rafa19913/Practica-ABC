@@ -23,6 +23,6 @@ urlpatterns = [
     path('', registros),
     path('registros', registros),
     path('nuevo', nuevo),
-    path('editar_registro/<int:id>', editarRegistro),
-    path('eliminar_registro/<int:id>', eliminarRegistro),
+    path('editar', editarRegistro),
+    path('eliminar', eliminarRegistro),
 ]

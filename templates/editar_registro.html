@@ -9,20 +9,20 @@
 <h1>Editar registro</h1>
 
 
-<h2>Registro actual</h2>
-<ul>
-    <li> Marca: {{ registro.marca }}  </li>
-    <li> Presentacion: {{ registro.presentacion }}  </li>
-</ul>
+<form method="POST" action="editar_registro">
 
-<form method="POST">
+  <select name="marca" id="marca">
 
-  <select name="marca" id="marca" >
+        <option value="{{ registro.marca.id }}" >
+                {{ registro.marca }}
+        </option>
+
          {% for marca in marcas %}
 
-        <option value="{{ marca.id }}" >
-            {{ marca.name }}
-        </option>
+            {% if registro.marca.id != marca.id %}
+                <option value="{{ marca.id }}" >{{ marca.name }}</option>
+            {% endif %}
+
 
         {% endfor %}
 
@@ -30,12 +30,19 @@
 
 <br><br>
 
-   <select name="presentacion" id="presentacion" >
+    <select name="presentacion" id="presentacion">
+
+        <option value="{{ registro.presentacion.id }}" >
+                {{ registro.presentacion }}
+        </option>
+
          {% for presentacion in presentaciones %}
 
-        <option value="{{ presentacion.id }}" >
-            {{ presentacion.name }}
-        </option>
+            {% if registro.presentacion.id != presentacion.id %}
+                <option value="{{ presentacion.id }}" >{{ presentacion.name }}</option>
+
+            {% endif %}
+
 
         {% endfor %}
 

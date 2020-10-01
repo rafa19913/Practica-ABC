@@ -1,38 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+  {# Cargamos la librería #}
+   {% load bootstrap4 %}
 <head>
     <meta charset="UTF-8">
     <title>Registros</title>
+
+
+   {# CSS Bootstrap #}
+   {% bootstrap_css %}
+
+
 </head>
-<body>
+<body style="margin: 50px">
 
 <h1>Altas, bajas y cambios</h1>
 
 <h2> Num. Registros: {{ no_registros }} </h2>
 
-<button>
-    <a href="nuevo">Agregar nuevo registro</a>
-</button>
+<button type="button" class="btn btn-success" data-toggle="modal" data-target="#agregarRegistroModal">Agregar nuevo registro</button>
 
 
 <br><br>
 
-<style>
-    table, th, td {
-      border: 1px solid black;
-    }
 
-</style>
 
-<table style="width:100%">
+<table class="table table-striped">
 
     <thead>
 
       <tr>
-        <th>Marca</th>
-        <th>Presentacion</th>
-        <th>Editar</th>
-        <th>Eliminar</th>
+
+        <th scope="col"><h3><i>Marca</i></h3></th>
+        <th scope="col"><h3><i>Presentacion</i></h3></th>
+        <th scope="col"><h3><i>Editar</i></h3></th>
+        <th scope="col"><h3><i>Eliminar</i></h3></th>
       </tr>
 
     </thead>
@@ -42,10 +44,19 @@
     {% for registro in registros %}
 
         <tr>
-            <th> {{ registro.get_marca }} </th>
-            <th>{{ registro.get_presentacion }}</th>
-            <th> <a href="editar_registro/{{ registro.id }}">Editar</a> </th>
-            <th> <a href="eliminar_registro/{{ registro.id }}">Eliminar</a> </th>
+            <th> {{ registro.marca }} </th>
+            <th>{{ registro.presentacion }}</th>
+            <th>
+                <a href="#" class="btn btn-warning btn-sm" onClick="openModalEdit({{registro.id}}, '{{registro.marca.id}}','{{registro.presentacion.id}}' , '{{registro.marca}}' , '{{registro.presentacion}}' )">Editar</a>
+            </th>
+
+
+
+            <th>
+
+                <a href="#" class="btn btn-danger btn-sm" onClick="openModalDelete({{registro.id}})">Eliminar</a>
+
+            </th>
 
         </tr>
 
@@ -56,5 +67,238 @@
 
 </table>
 
+
+<!-- Modal agregar -->
+<div class="modal fade" id="agregarRegistroModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Agregar registro</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+            <form action="nuevo" method="POST">
+
+              <select class="custom-select"  name="marca" id="marca" >
+                     {% for marca in marcas %}
+
+                    <option value="{{ marca.id }}" >
+                        {{ marca.name }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            <br><br>
+
+               <select class="custom-select"  name="presentacion" id="presentacion" >
+                     {% for presentacion in presentaciones %}
+
+                    <option value="{{ presentacion.id }}" >
+                        {{ presentacion.name }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+            <br><br>
+
+            {% csrf_token %}
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal editar -->
+<div class="modal fade" id="editarRegistroModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editar registro</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+            <form action="editar" method="post">
+
+
+                <input name="id" id="id_registro" hidden >
+
+                <select class="custom-select" name="marcaselect" id="marcaselect">
+
+                    <option id="marcaactual">
+
+                    </option>
+
+                     {% for marca in marcas %}
+                            <option value="{{ marca.id }}" >{{ marca.name }}</option>
+                    {% endfor %}
+
+                </select>
+
+                <br><br>
+
+                <select class="custom-select" name="presentacionselect" id="presentacionselect">
+
+                    <option id="presentacionactual">
+
+                    </option>
+
+                     {% for presentacion in presentaciones %}
+
+                        <option value="{{ presentacion.id }}" >{{ presentacion.name }}</option>
+
+                    {% endfor %}
+
+                </select>
+                <br><br>
+
+
+
+                {% csrf_token %}
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-warning" >Editar</button>
+      </div>
+
+     </form>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Eliminar -->
+<div class="modal fade" id="eliminarRegistroModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Eliminar registro</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+            <form action="eliminar" method="post">
+
+
+                <input name="idEliminarRegistro" id="idEliminarRegistro" hidden>
+
+                <h4> Por favor confirma para eliminar el registro </h4>
+
+                {% csrf_token %}
+
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-danger" >Eliminar</button>
+      </div>
+
+     </form>
+
+    </div>
+  </div>
+</div>
+
+
+
+          {# JS y jQuery Bootstrap #}
+   {% bootstrap_javascript jquery='full' %}
+
+
+<script>
+
+
+    function openModalDelete(id){
+        idEliminar = document.getElementById('idEliminarRegistro');
+        idEliminar.value = id;
+
+
+
+
+         $('#eliminarRegistroModal').modal('show');
+
+    }
+
+
+
+    function openModalEdit(id, marca, pres, marcastr, presstr){
+        inputid = document.getElementById('id_registro');
+        optionMarca = document.getElementById('marcaactual');
+        optionPresentacion = document.getElementById('presentacionactual');
+
+        inputid.value = id;
+
+        optionMarca.innerHTML = marcastr;
+        optionMarca.value = marca;
+
+
+        optionPresentacion.innerHTML = presstr;
+        optionPresentacion.value = pres;
+
+         $('#editarRegistroModal').modal('show');
+
+         compararSelect();
+
+    }
+
+
+
+
+    function compararSelect(){
+        var select = document.getElementById("marcaselect");
+        var length = select.options.length;
+        var marcaActual = document.getElementById("marcaactual").innerHTML;
+
+
+        for (i = length-1; i >= 0; i--) {
+                if (marcaActual == select.options[i].innerHTML){
+                    select.options[i] = null;
+                    break;
+                }
+        }
+
+        var selectPres = document.getElementById("presentacionselect");
+        var lengthPres = selectPres.options.length;
+        var presActual = document.getElementById("presentacionactual").innerHTML;
+
+
+        for (i = lengthPres-1; i >= 0; i--) {
+                if (presActual == selectPres.options[i].innerHTML){
+                    selectPres.options[i] = null;
+                    break;
+                }
+        }
+
+    }
+
+
+</script>
+
+
+
+
 </body>
 </html>
+
+
